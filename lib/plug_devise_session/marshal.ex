@@ -1,4 +1,4 @@
-defmodule Surgex.DeviseSession.Marshal do
+defmodule PlugDeviseSession.Marshal do
   @moduledoc false
 
   def encode(value) do

@@ -1,14 +1,12 @@
-defmodule Surgex.DeviseSessionTest do
+defmodule PlugDeviseSessionTest do
   use ExUnit.Case
   use Plug.Test
   alias Plug.Conn
-  alias Surgex.DeviseSession
-  alias Surgex.DeviseSession.Helpers
+  alias PlugDeviseSession
+  alias PlugDeviseSession.Helpers
 
   test "patches the config" do
     System.put_env("SESSION_COOKIE_DOMAIN", "my.domain.com")
-
-    :ets.new(Plug.Keys, [:named_table, :public, read_concurrency: true])
 
     secret_key_base =
       1..64
@@ -25,7 +23,7 @@ defmodule Surgex.DeviseSessionTest do
       :get
       |> conn("/foo")
       |> Map.put(:secret_key_base, {:system, "SECRET_KEY_BASE"})
-      |> DeviseSession.call(DeviseSession.init(opts))
+      |> PlugDeviseSession.call(PlugDeviseSession.init(opts))
       |> Conn.fetch_session()
       |> Conn.put_session("warden.user.user.key", [[123], ""])
       |> Conn.put_session("warden.user.employee.key", ["", [456], ""])
@@ -44,7 +42,7 @@ defmodule Surgex.DeviseSessionTest do
       |> conn("/foo")
       |> Map.put(:secret_key_base, secret_key_base)
       |> put_req_cookie("_my_rails_project_session", session_cookie)
-      |> DeviseSession.call(DeviseSession.init(opts))
+      |> PlugDeviseSession.call(PlugDeviseSession.init(opts))
       |> Conn.fetch_session()
 
     assert Helpers.get_user_id(getter_conn) == 123

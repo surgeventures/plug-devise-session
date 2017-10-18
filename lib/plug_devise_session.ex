@@ -1,12 +1,12 @@
-defmodule Surgex.DeviseSession do
+defmodule PlugDeviseSession do
   @moduledoc """
-  Configures Ruby on Rails + Devise session in Plug.
+  Simple plug for sharing Devise session in Elixir.
 
   ## Usage
 
   Add the following to your application's endpoint (or replace an existing call to `Plug.Session`):
 
-      plug Surgex.DeviseSession,
+      plug PlugDeviseSession,
         key: "_my_rails_project_session"
 
   Here's a list of additional options:
@@ -37,13 +37,13 @@ defmodule Surgex.DeviseSession do
 
   Finally, you can get the current user's identifier as follows:
 
-      Surgex.DeviseSession.Helpers.get_user_id()
+      PlugDeviseSession.Helpers.get_user_id()
 
   """
 
   alias Plug.Session
-  alias Surgex.Config
-  alias Surgex.DeviseSession.Marshal
+  alias Confix
+  alias PlugDeviseSession.Marshal
 
   @default_opts [
     store: PlugRailsCookieSessionStore,
@@ -68,13 +68,13 @@ defmodule Surgex.DeviseSession do
   end
 
   defp patch_conn(conn) do
-    update_in(conn.secret_key_base, &Config.parse/1)
+    update_in(conn.secret_key_base, &Confix.parse/1)
   end
 
   defp patch_config(config) do
     config
-    |> update_in([:cookie_opts, :domain], &Config.parse/1)
-    |> update_in([:store_config, :encryption_salt], &Config.parse/1)
-    |> update_in([:store_config, :signing_salt], &Config.parse/1)
+    |> update_in([:cookie_opts, :domain], &Confix.parse/1)
+    |> update_in([:store_config, :encryption_salt], &Confix.parse/1)
+    |> update_in([:store_config, :signing_salt], &Confix.parse/1)
   end
 end

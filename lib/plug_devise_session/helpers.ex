@@ -1,6 +1,6 @@
-defmodule Surgex.DeviseSession.Helpers do
+defmodule PlugDeviseSession.Helpers do
   @moduledoc """
-  Helpers that assist in working with session fetched via `Surgex.DeviseSession` plug.
+  Helpers that assist in working with session fetched via `PlugDeviseSession` plug.
   """
 
   alias Plug.Conn
