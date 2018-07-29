@@ -15,9 +15,16 @@ defmodule PlugDeviseSessionTest do
 
     System.put_env("SECRET_KEY_BASE", secret_key_base)
 
-    opts = [store: :cookie,
-            key: "_my_rails_project_session",
-            domain: {:system, "SESSION_COOKIE_DOMAIN"}]
+    opts = [
+      store: :cookie,
+      key: "_my_rails_project_session",
+      domain: {:system, "SESSION_COOKIE_DOMAIN"}
+    ]
+
+    auth_salt =
+      1..30
+      |> Enum.map(fn _ -> "x" end)
+      |> Enum.join()
 
     setter_conn =
       :get
@@ -25,17 +32,19 @@ defmodule PlugDeviseSessionTest do
       |> Map.put(:secret_key_base, {:system, "SECRET_KEY_BASE"})
       |> PlugDeviseSession.call(PlugDeviseSession.init(opts))
       |> Conn.fetch_session()
-      |> Conn.put_session("warden.user.user.key", [[123], ""])
-      |> Conn.put_session("warden.user.employee.key", ["", [456], ""])
+      |> Conn.put_session("warden.user.user.key", [[123], auth_salt])
+      |> Conn.put_session("warden.user.employee.key", ["", [456], auth_salt])
       |> resp(200, "")
       |> send_resp()
 
-    assert %{resp_cookies: %{
-      "_my_rails_project_session" => %{
-        domain: "my.domain.com",
-        value: session_cookie
-      }
-    }} = setter_conn
+    assert %{
+             resp_cookies: %{
+               "_my_rails_project_session" => %{
+                 domain: "my.domain.com",
+                 value: session_cookie
+               }
+             }
+           } = setter_conn
 
     getter_conn =
       :get
@@ -47,5 +56,11 @@ defmodule PlugDeviseSessionTest do
 
     assert Helpers.get_user_id(getter_conn) == 123
     assert Helpers.get_user_id(getter_conn, :employee) == 456
+
+    assert Helpers.get_user_auth_data(getter_conn) == {123, auth_salt}
+    assert Helpers.get_user_auth_data(getter_conn, :employee) == {456, auth_salt}
+
+    new_conn = Helpers.put_user_auth_data(getter_conn, 789, "yyyyyyy")
+    assert Helpers.get_user_auth_data(new_conn) == {789, "yyyyyyy"}
   end
 end
