@@ -4,7 +4,7 @@ defmodule PlugDeviseSession.Mixfile do
   def project do
     [
       app: :plug_devise_session,
-      version: "0.2.0",
+      version: "0.3.0",
       elixir: "~> 1.6",
       elixirc_paths: elixirc_paths(Mix.env()),
       build_embedded: Mix.env() == :prod,
