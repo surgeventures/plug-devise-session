@@ -21,7 +21,7 @@ defmodule PlugDeviseSession.Helpers do
   Returns currently logged-in user's identifier, optionally in specified scope.
   """
   @deprecated "Use get_user_auth_data/2 instead"
-  @spec get_user_id(Plug.Conn.t(), scope) :: Plug.Conn.t()
+  @spec get_user_id(Plug.Conn.t(), scope) :: id | nil
   def get_user_id(conn, scope \\ :user) do
     case Conn.get_session(conn, "warden.user.#{scope}.key") do
       [[id], _] when is_integer(id) ->
@@ -38,7 +38,7 @@ defmodule PlugDeviseSession.Helpers do
   @doc """
   Returns currently logged-in user's id and auth salt, optionally in specified scope.
   """
-  @spec get_user_auth_data(Plug.Conn.t(), scope) :: Plug.Conn.t()
+  @spec get_user_auth_data(Plug.Conn.t(), scope) :: {id, salt} | nil
   def get_user_auth_data(conn, scope \\ :user) do
     case Conn.get_session(conn, "warden.user.#{scope}.key") do
       [[id], auth_salt] when is_integer(id) ->
