@@ -62,5 +62,10 @@ defmodule PlugDeviseSessionTest do
 
     new_conn = Helpers.put_user_auth_data(getter_conn, 789, "yyyyyyy")
     assert Helpers.get_user_auth_data(new_conn) == {789, "yyyyyyy"}
+
+    logout_conn = Helpers.delete_user_auth_data(getter_conn)
+
+    assert is_nil(Conn.get_session(logout_conn, "warden.user.user.key"))
+    assert Conn.get_session(logout_conn, "warden.user.employee.key") == ["", [456], auth_salt]
   end
 end

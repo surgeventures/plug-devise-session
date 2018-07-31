@@ -6,6 +6,13 @@ defmodule PlugDeviseSession.Helpers do
   alias Plug.Conn
 
   @doc """
+  Removes user auth data, optionally from a specified scope.
+  """
+  def delete_user_auth_data(conn, scope \\ :user) do
+    Conn.delete_session(conn, "warden.user.#{scope}.key")
+  end
+
+  @doc """
   Returns currently logged-in user's identifier, optionally in specified scope.
   """
   @deprecated "Use get_user_auth_data/2 instead"
