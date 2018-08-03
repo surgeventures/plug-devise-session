@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+### Added
+- `PlugDeviseSession.Rememberable` module for handling Devise's remember session cookie.
+
 ## [0.3.0] - 2018-07-31
 ### Added
 - Function to delete user auth data (`PlugDeviseSession.Helpers.delete_user_auth_data/2`).
