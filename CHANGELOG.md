@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## [0.4.0] - 2018-08-03
 ### Added
 - `PlugDeviseSession.Rememberable` module for handling Devise's remember session cookie.
 
