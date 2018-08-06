@@ -41,9 +41,11 @@ defmodule PlugDeviseSession.Rememberable do
 
   ## Options
 
+    * `:domain` - domain to issue the remember user cookie in.
     * `:key_digest` - digest algorithm to use for deriving the signing key. Accepts any value supported by `Plug.Crypto.KeyGenerator.generate/3`, defaults to `:sha`.
     * `:key_iterations` - number of iterations for signing key derivation. Accepts any value supported by `Plug.Crypto.KeyGenerator.generate/3`, defaults to 1000.
     * `:key_length` - desired length of derived signing key. Accepts any value supported by `Plug.Crypto.KeyGenerator.generate/3`, defaults to 64.
+    * `:max_age` - desired validity of remember user cookie in seconds, defaults to 2 weeks.
     * `:serializer` - module used for cookie data serialization, defaults to `PlugDeviseSession.Marshal` which in turn uses `ExMarshal` (a Rails-compatible marshal module).
     * `:signing_salt` - salt used for signing key derivation. Should be set to the value used by Rails, defaults to "signed cookie".
 
@@ -60,7 +62,13 @@ defmodule PlugDeviseSession.Rememberable do
       |> MessageVerifier.sign(signing_key)
       |> URI.encode_www_form()
 
-    Conn.put_resp_cookie(conn, "remember_#{scope}_token", cookie_value)
+    cookie_opts = [
+      domain: Keyword.get(options, :domain),
+      http_only: true,
+      max_age: Keyword.get(options, :max_age, 1_209_600)
+    ]
+
+    Conn.put_resp_cookie(conn, "remember_#{scope}_token", cookie_value, cookie_opts)
   end
 
   defp encode_timestamp(%DateTime{time_zone: "Etc/UTC", utc_offset: 0} = timestamp) do

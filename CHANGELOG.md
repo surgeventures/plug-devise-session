@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+### Added
+- Allow to pass `domain` and `max_age` options to `PlugDeviseSession.Rememberable.remember_user/4`.
+
 ## [0.4.0] - 2018-08-03
 ### Added
 - `PlugDeviseSession.Rememberable` module for handling Devise's remember session cookie.
