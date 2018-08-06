@@ -71,6 +71,13 @@ defmodule PlugDeviseSession.RememberableTest do
       assert remember_cookie.max_age == 12_345
     end
 
+    test "defaults max_age to 2 weeks", %{conn: conn} do
+      remember_conn = Rememberable.remember_user(conn, @user_auth_data)
+      remember_cookie = remember_conn.resp_cookies["remember_user_token"]
+      two_weeks_in_seconds = 2 * 7 * 24 * 60 * 60
+      assert remember_cookie.max_age == two_weeks_in_seconds
+    end
+
     test "issues a http_only cookie", %{conn: conn} do
       remember_conn = Rememberable.remember_user(conn, @user_auth_data)
 
