@@ -56,6 +56,35 @@ defmodule PlugDeviseSession.RememberableTest do
       assert is_binary(remember_conn.cookies["remember_employee_token"])
     end
 
+    test "respects domain option", %{conn: conn} do
+      remember_conn =
+        Rememberable.remember_user(conn, @user_auth_data, :user, domain: ".example.com")
+
+      remember_cookie = remember_conn.resp_cookies["remember_user_token"]
+      assert remember_cookie.domain == ".example.com"
+    end
+
+    test "respects max_age option", %{conn: conn} do
+      remember_conn = Rememberable.remember_user(conn, @user_auth_data, :user, max_age: 12_345)
+
+      remember_cookie = remember_conn.resp_cookies["remember_user_token"]
+      assert remember_cookie.max_age == 12_345
+    end
+
+    test "defaults max_age to 2 weeks", %{conn: conn} do
+      remember_conn = Rememberable.remember_user(conn, @user_auth_data)
+      remember_cookie = remember_conn.resp_cookies["remember_user_token"]
+      two_weeks_in_seconds = 2 * 7 * 24 * 60 * 60
+      assert remember_cookie.max_age == two_weeks_in_seconds
+    end
+
+    test "issues a http_only cookie", %{conn: conn} do
+      remember_conn = Rememberable.remember_user(conn, @user_auth_data)
+
+      remember_cookie = remember_conn.resp_cookies["remember_user_token"]
+      assert remember_cookie.http_only
+    end
+
     test "raises when timestamp is not in UTC", %{conn: conn} do
       cest_timestamp = %DateTime{
         @user_timestamp
