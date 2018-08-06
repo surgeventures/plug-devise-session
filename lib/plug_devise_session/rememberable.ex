@@ -106,8 +106,9 @@ defmodule PlugDeviseSession.Rememberable do
 
   defp decode_timestamp(timestamp) when is_binary(timestamp) do
     {seconds, ""} = Float.parse(timestamp)
+    miliseconds = seconds * 1_000_000
 
-    (seconds * 1_000_000)
+    miliseconds
     |> trunc()
     |> DateTime.from_unix!(:microseconds)
   end
