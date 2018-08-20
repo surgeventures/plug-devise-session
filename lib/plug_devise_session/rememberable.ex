@@ -16,14 +16,6 @@ defmodule PlugDeviseSession.Rememberable do
   @type scope :: atom | String.t()
   @type user_auth_info :: {id, auth_key, timestamp}
 
-  @type opts :: [
-          key_digest: atom,
-          key_iterations: integer,
-          key_length: integer,
-          serializer: module,
-          signing_salt: binary
-        ]
-
   alias Plug.Conn
   alias Plug.Crypto.KeyGenerator
   alias PlugRailsCookieSessionStore.MessageVerifier
@@ -35,6 +27,23 @@ defmodule PlugDeviseSession.Rememberable do
     serializer: ExMarshal,
     signing_salt: "signed cookie"
   ]
+
+  @doc """
+  Removes the remember user cookie.
+
+  ## Options
+
+    * `:domain` - domain the remember user cookie was issued in.
+  """
+  @spec forget_user(Plug.Conn.t(), scope, domain: String.t()) :: Plug.Conn.t()
+  def forget_user(conn, scope \\ :user, opts \\ []) do
+    cookie_opts =
+      [http_only: true]
+      |> Keyword.merge(opts)
+      |> Keyword.take([:domain, :http_only])
+
+    Conn.delete_resp_cookie(conn, "remember_#{scope}_token", cookie_opts)
+  end
 
   @doc """
   Sets a signed remember user cookie on the connection.
@@ -50,7 +59,18 @@ defmodule PlugDeviseSession.Rememberable do
     * `:signing_salt` - salt used for signing key derivation. Should be set to the value used by Rails, defaults to "signed cookie".
 
   """
-  @spec remember_user(Plug.Conn.t(), user_auth_info, scope, opts) :: Plug.Conn.t()
+  @spec remember_user(
+          Plug.Conn.t(),
+          user_auth_info,
+          scope,
+          domain: String.t(),
+          key_digest: atom,
+          key_iterations: integer,
+          key_length: integer,
+          max_age: integer,
+          serializer: module,
+          signing_salt: binary
+        ) :: Plug.Conn.t()
   def remember_user(conn, {id, auth_key, timestamp}, scope \\ :user, opts \\ []) do
     options = Keyword.merge(@default_opts, opts)
     serializer = Keyword.fetch!(options, :serializer)
@@ -62,11 +82,10 @@ defmodule PlugDeviseSession.Rememberable do
       |> MessageVerifier.sign(signing_key)
       |> URI.encode_www_form()
 
-    cookie_opts = [
-      domain: Keyword.get(options, :domain),
-      http_only: true,
-      max_age: Keyword.get(options, :max_age, 1_209_600)
-    ]
+    cookie_opts =
+      [http_only: true, max_age: 1_209_600]
+      |> Keyword.merge(options)
+      |> Keyword.take([:domain, :http_only, :max_age])
 
     Conn.put_resp_cookie(conn, "remember_#{scope}_token", cookie_value, cookie_opts)
   end
@@ -88,7 +107,15 @@ defmodule PlugDeviseSession.Rememberable do
   * `:signing_salt` - salt used for signing key derivation. Should be set to the value used by Rails, defaults to "signed cookie".
 
   """
-  @spec recover_user(Plug.Conn.t(), scope, opts) :: {:ok, user_auth_info} | {:error, :unauthorized}
+  @spec recover_user(
+          Plug.Conn.t(),
+          scope,
+          key_digest: atom,
+          key_iterations: integer,
+          key_length: integer,
+          serializer: module,
+          signing_salt: binary
+        ) :: {:ok, user_auth_info} | {:error, :unauthorized}
   def recover_user(conn, scope \\ :user, opts \\ []) do
     options = Keyword.merge(@default_opts, opts)
     serializer = Keyword.fetch!(options, :serializer)

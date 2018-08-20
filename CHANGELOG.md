@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- Function to remove user remember session cookie (`PlugDeviseSession.Rememberable.forget_user/3`).
+
 ## [0.5.0] - 2018-08-06
 ### Added
 - Allow to pass `domain` and `max_age` options to `PlugDeviseSession.Rememberable.remember_user/4`.

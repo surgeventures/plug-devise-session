@@ -33,6 +33,51 @@ defmodule PlugDeviseSession.RememberableTest do
     {:ok, conn: conn}
   end
 
+  describe "forget_user/3" do
+    test "removes remember user cookie", %{conn: conn} do
+      remember_conn =
+        conn
+        |> Rememberable.forget_user()
+        |> fetch_cookies()
+
+      refute Map.has_key?(remember_conn.cookies, "remember_user_token")
+
+      resp_cookie = remember_conn.resp_cookies["remember_user_token"]
+      assert resp_cookie[:http_only]
+      assert resp_cookie[:max_age] == 0
+      assert resp_cookie[:universal_time] == {{1970, 1, 1}, {0, 0, 0}}
+    end
+
+    test "respects scope parameter", %{conn: conn} do
+      remember_conn =
+        conn
+        |> Rememberable.forget_user(:employee)
+        |> fetch_cookies()
+
+      refute Map.has_key?(remember_conn.cookies, "remember_employee_token")
+
+      resp_cookie = remember_conn.resp_cookies["remember_employee_token"]
+      assert resp_cookie[:http_only]
+      assert resp_cookie[:max_age] == 0
+      assert resp_cookie[:universal_time] == {{1970, 1, 1}, {0, 0, 0}}
+    end
+
+    test "respects domain option", %{conn: conn} do
+      remember_conn =
+        conn
+        |> Rememberable.forget_user(:user, domain: ".example.com")
+        |> fetch_cookies()
+
+      refute Map.has_key?(remember_conn.cookies, "remember_user_token")
+
+      resp_cookie = remember_conn.resp_cookies["remember_user_token"]
+      assert resp_cookie[:domain] == ".example.com"
+      assert resp_cookie[:http_only]
+      assert resp_cookie[:max_age] == 0
+      assert resp_cookie[:universal_time] == {{1970, 1, 1}, {0, 0, 0}}
+    end
+  end
+
   describe "remember_user/4" do
     test "issues remember user cookie", %{conn: conn} do
       remember_conn =
