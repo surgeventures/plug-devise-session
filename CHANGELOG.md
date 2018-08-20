@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.6.0] - 2018-08-20
 ### Added
 - Function to remove user remember session cookie (`PlugDeviseSession.Rememberable.forget_user/3`).
 
