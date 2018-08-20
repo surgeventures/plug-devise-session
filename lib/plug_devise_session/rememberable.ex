@@ -35,7 +35,7 @@ defmodule PlugDeviseSession.Rememberable do
 
     * `:domain` - domain the remember user cookie was issued in.
   """
-  @spec forget_user(Plug.Conn.t(), scope, domain: String.t(), max_age: integer) :: Plug.Conn.t()
+  @spec forget_user(Plug.Conn.t(), scope, domain: String.t()) :: Plug.Conn.t()
   def forget_user(conn, scope \\ :user, opts \\ []) do
     cookie_opts =
       [http_only: true]
