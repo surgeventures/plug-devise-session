@@ -74,6 +74,7 @@ defmodule PlugDeviseSession do
   defp patch_config(config) do
     config
     |> update_in([:cookie_opts, :domain], &Confix.parse/1)
+    |> update_in([:key], &Confix.parse/1)
     |> update_in([:store_config, :encryption_salt], &Confix.parse/1)
     |> update_in([:store_config, :signing_salt], &Confix.parse/1)
   end
