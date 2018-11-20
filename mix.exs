@@ -55,7 +55,8 @@ defmodule PlugDeviseSession.Mixfile do
       {:ex_marshal, "~> 0.0.8"},
       {:excoveralls, "~> 0.7", only: :test},
       {:plug, "~> 1.3.2 or ~> 1.4"},
-      {:plug_rails_cookie_session_store, "~> 0.2.0"}
+      {:plug_rails_cookie_session_store,
+       github: "surgeventures/plug_rails_cookie_session_store", tag: "0.3.0"}
     ]
   end
 
