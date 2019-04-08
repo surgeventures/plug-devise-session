@@ -63,6 +63,11 @@ defmodule PlugDeviseSessionTest do
     new_conn = Helpers.put_user_auth_data(getter_conn, 789, "yyyyyyy")
     assert Helpers.get_user_auth_data(new_conn) == {789, "yyyyyyy"}
 
+    new_conn = Helpers.put_session_id(getter_conn, 32)
+    session_id = Conn.get_session(new_conn, "session_id")
+    assert is_binary(session_id)
+    assert byte_size(session_id) == 32
+
     logout_conn = Helpers.delete_user_auth_data(getter_conn)
 
     assert is_nil(Conn.get_session(logout_conn, "warden.user.user.key"))
