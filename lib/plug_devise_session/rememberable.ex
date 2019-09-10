@@ -91,7 +91,7 @@ defmodule PlugDeviseSession.Rememberable do
   end
 
   defp encode_timestamp(%DateTime{time_zone: "Etc/UTC", utc_offset: 0} = timestamp) do
-    microseconds = DateTime.to_unix(timestamp, :microseconds)
+    microseconds = DateTime.to_unix(timestamp, :microsecond)
     Float.to_string(microseconds / 1_000_000.0)
   end
 
@@ -137,7 +137,7 @@ defmodule PlugDeviseSession.Rememberable do
 
     miliseconds
     |> trunc()
-    |> DateTime.from_unix!(:microseconds)
+    |> DateTime.from_unix!(:microsecond)
   end
 
   defp generate_key(%Plug.Conn{secret_key_base: secret_key_base}, opts) do
