@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.1] - 2019-09-12
+### Changed
+- Usage of `DateTime.to_unix` in `PlugDeviseSession.Rememberable` to not use deprecated format anymore.
+
+## [0.7.0] - 2018-10-16
+### Added
+- Ability to configure cookie key using env variable.
+
 ## [0.6.0] - 2018-08-20
 ### Added
 - Function to remove user remember session cookie (`PlugDeviseSession.Rememberable.forget_user/3`).
