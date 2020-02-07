@@ -20,6 +20,8 @@ defmodule PlugDeviseSession.Rememberable do
   alias Plug.Crypto.KeyGenerator
   alias PlugRailsCookieSessionStore.MessageVerifier
 
+  @cookie_attributres [:domain, :max_age, :path, :secure, :http_only, :extra]
+
   @default_opts [
     key_digest: :sha,
     key_iterations: 1000,
@@ -40,7 +42,7 @@ defmodule PlugDeviseSession.Rememberable do
     cookie_opts =
       [http_only: true]
       |> Keyword.merge(opts)
-      |> Keyword.take([:domain, :http_only])
+      |> Keyword.take(@cookie_attributres)
 
     Conn.delete_resp_cookie(conn, "remember_#{scope}_token", cookie_opts)
   end
@@ -51,10 +53,13 @@ defmodule PlugDeviseSession.Rememberable do
   ## Options
 
     * `:domain` - domain to issue the remember user cookie in.
+    * `:extra` - lets specify arbitrary options that are added to cookie.
     * `:key_digest` - digest algorithm to use for deriving the signing key. Accepts any value supported by `Plug.Crypto.KeyGenerator.generate/3`, defaults to `:sha`.
     * `:key_iterations` - number of iterations for signing key derivation. Accepts any value supported by `Plug.Crypto.KeyGenerator.generate/3`, defaults to 1000.
     * `:key_length` - desired length of derived signing key. Accepts any value supported by `Plug.Crypto.KeyGenerator.generate/3`, defaults to 64.
     * `:max_age` - desired validity of remember user cookie in seconds, defaults to 2 weeks.
+    * `:path` - send cookie only on matching URL path.
+    * `:secure` - a secure cookie is only sent to the server over the HTTPS protocol.
     * `:serializer` - module used for cookie data serialization, defaults to `PlugDeviseSession.Marshal` which in turn uses `ExMarshal` (a Rails-compatible marshal module).
     * `:signing_salt` - salt used for signing key derivation. Should be set to the value used by Rails, defaults to "signed cookie".
 
@@ -68,6 +73,8 @@ defmodule PlugDeviseSession.Rememberable do
           key_iterations: integer,
           key_length: integer,
           max_age: integer,
+          path: String.t(),
+          secure: boolean,
           serializer: module,
           signing_salt: binary
         ) :: Plug.Conn.t()
@@ -85,7 +92,7 @@ defmodule PlugDeviseSession.Rememberable do
     cookie_opts =
       [http_only: true, max_age: 1_209_600]
       |> Keyword.merge(options)
-      |> Keyword.take([:domain, :http_only, :max_age])
+      |> Keyword.take(@cookie_attributres)
 
     Conn.put_resp_cookie(conn, "remember_#{scope}_token", cookie_value, cookie_opts)
   end
