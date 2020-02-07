@@ -17,7 +17,7 @@
   "mimerl": {:hex, :mimerl, "1.0.2", "993f9b0e084083405ed8252b99460c4f0563e41729ab42d9074fd5e52439be88", [:rebar3], [], "hexpm"},
   "plug": {:hex, :plug, "1.7.1", "8516d565fb84a6a8b2ca722e74e2cd25ca0fc9d64f364ec9dbec09d33eb78ccd", [:mix], [{:mime, "~> 1.0", [hex: :mime, repo: "hexpm", optional: false]}, {:plug_crypto, "~> 1.0", [hex: :plug_crypto, repo: "hexpm", optional: false]}], "hexpm"},
   "plug_crypto": {:hex, :plug_crypto, "1.0.0", "18e49317d3fa343f24620ed22795ec29d4a5e602d52d1513ccea0b07d8ea7d4d", [:mix], [], "hexpm"},
-  "plug_rails_cookie_session_store": {:git, "https://github.com/surgeventures/plug_rails_cookie_session_store.git", "81cb7f84905a1a10fac521ac53a36adfbee56c5d", [tag: "0.3.0"]},
+  "plug_rails_cookie_session_store": {:hex, :plug_rails_cookie_session_store, "1.0.0", "d1160301e9aaf3e962e29fb8920590285b448f70254ffb124228616c5360e236", [:mix], [{:plug, ">= 1.0.0", [hex: :plug, repo: "hexpm", optional: false]}], "hexpm"},
   "poison": {:hex, :poison, "4.0.1", "bcb755a16fac91cad79bfe9fc3585bb07b9331e50cfe3420a24bcc2d735709ae", [:mix], [], "hexpm"},
   "ssl_verify_fun": {:hex, :ssl_verify_fun, "1.1.1", "28a4d65b7f59893bc2c7de786dec1e1555bd742d336043fe644ae956c3497fbe", [:make, :rebar], [], "hexpm"},
   "unicode_util_compat": {:hex, :unicode_util_compat, "0.3.1", "a1f612a7b512638634a603c8f401892afbf99b8ce93a45041f8aaca99cadb85e", [:rebar3], [], "hexpm"},
