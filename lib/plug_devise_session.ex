@@ -14,6 +14,14 @@ defmodule PlugDeviseSession do
   - `domain`: set it to `domain` provided in the `session_store()` call of your Ruby on Rails
     project
 
+  - `extra`: lets specify arbitrary options that are added to cookie
+
+  - `max_age`: desired validity of remember user cookie in seconds
+
+  - `path`: send cookie only on matching URL path
+
+  - `secure`: a secure cookie is only sent to the server over the HTTPS protocol
+
   - `serializer`: set it to `Poison` or other JSON serializer of choice if your Ruby on Rails
     project sets `cookies_serializer` to `:json` (default in Rails 4.1 and newer)
 
