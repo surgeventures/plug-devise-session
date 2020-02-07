@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.9.0] - 2020-02-07
+### Changed
+- Update `PlugDeviseSession` plug to also accept `path`, `secure`, and `max_age` cookie options and the special `extra` options used to add arbitrary cookie options.
+
 ## [0.8.0] - 2020-02-07
 ### Changed
 - Update `PlugDeviseSession.Rememberable` to also accept `path`, `secure` cookie options and the special `extra` options used to add arbitrary cookie options.

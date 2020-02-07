@@ -7,6 +7,10 @@ defmodule PlugDeviseSessionTest do
 
   test "patches the config" do
     System.put_env("SESSION_COOKIE_DOMAIN", "my.domain.com")
+    System.put_env("SESSION_COOKIE_SECURE", "1")
+    System.put_env("SESSION_COOKIE_MAX_AGE", "6000")
+    System.put_env("SESSION_COOKIE_EXTRA", "SameSite=Strict")
+    System.put_env("SESSION_COOKIE_PATH", "/docs")
 
     secret_key_base =
       1..64
@@ -18,7 +22,11 @@ defmodule PlugDeviseSessionTest do
     opts = [
       store: :cookie,
       key: "_my_rails_project_session",
-      domain: {:system, "SESSION_COOKIE_DOMAIN"}
+      domain: {:system, "SESSION_COOKIE_DOMAIN"},
+      extra: {:system, "SESSION_COOKIE_EXTRA"},
+      max_age: {:system, "SESSION_COOKIE_MAX_AGE", type: :integer},
+      path: {:system, "SESSION_COOKIE_PATH"},
+      secure: {:system, "SESSION_COOKIE_SECURE", type: :boolean}
     ]
 
     auth_salt =
@@ -41,6 +49,10 @@ defmodule PlugDeviseSessionTest do
              resp_cookies: %{
                "_my_rails_project_session" => %{
                  domain: "my.domain.com",
+                 secure: true,
+                 path: "/docs",
+                 extra: "SameSite=Strict",
+                 max_age: 6000,
                  value: session_cookie
                }
              }
