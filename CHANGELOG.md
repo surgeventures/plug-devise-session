@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.8.0] - 2020-02-07
+### Changed
+- Update `PlugDeviseSession.Rememberable` to also accept `path`, `secure` cookie options and the special `extra` options used to add arbitrary cookie options.
+
 ## [0.7.1] - 2019-09-12
 ### Changed
 - Usage of `DateTime.to_unix` in `PlugDeviseSession.Rememberable` to not use deprecated format anymore.

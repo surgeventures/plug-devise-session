@@ -142,6 +142,28 @@ defmodule PlugDeviseSession.RememberableTest do
         Rememberable.remember_user(conn, {@user_id, @user_auth_key, cest_timestamp})
       end)
     end
+
+    test "respects path option", %{conn: conn} do
+      remember_conn = Rememberable.remember_user(conn, @user_auth_data, :user, path: "/docs")
+
+      remember_cookie = remember_conn.resp_cookies["remember_user_token"]
+      assert remember_cookie.path == "/docs"
+    end
+
+    test "respects secure option", %{conn: conn} do
+      remember_conn = Rememberable.remember_user(conn, @user_auth_data, :user, secure: true)
+
+      remember_cookie = remember_conn.resp_cookies["remember_user_token"]
+      assert remember_cookie.secure
+    end
+
+    test "respects extra option", %{conn: conn} do
+      remember_conn =
+        Rememberable.remember_user(conn, @user_auth_data, :user, extra: "SameSite=Strict")
+
+      remember_cookie = remember_conn.resp_cookies["remember_user_token"]
+      assert remember_cookie.extra == "SameSite=Strict"
+    end
   end
 
   describe "recover_user/3" do
