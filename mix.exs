@@ -51,7 +51,7 @@ defmodule PlugDeviseSession.Mixfile do
     [
       {:confix, "~> 0.1"},
       {:credo, "~> 0.9", only: [:dev, :test]},
-      {:ex_doc, "~> 0.14", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.19", only: :dev, runtime: false},
       {:ex_marshal, "~> 0.0.8"},
       {:excoveralls, "~> 0.7", only: :test},
       {:plug, "~> 1.3.2 or ~> 1.4"},
