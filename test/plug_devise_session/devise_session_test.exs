@@ -12,10 +12,7 @@ defmodule PlugDeviseSessionTest do
     System.put_env("SESSION_COOKIE_EXTRA", "SameSite=Strict")
     System.put_env("SESSION_COOKIE_PATH", "/docs")
 
-    secret_key_base =
-      1..64
-      |> Enum.map(fn _ -> "x" end)
-      |> Enum.join()
+    secret_key_base = Enum.map_join(1..64, fn _ -> "x" end)
 
     System.put_env("SECRET_KEY_BASE", secret_key_base)
 
@@ -29,10 +26,7 @@ defmodule PlugDeviseSessionTest do
       secure: {:system, "SESSION_COOKIE_SECURE", type: :boolean}
     ]
 
-    auth_salt =
-      1..30
-      |> Enum.map(fn _ -> "x" end)
-      |> Enum.join()
+    auth_salt = Enum.map_join(1..30, fn _ -> "x" end)
 
     setter_conn =
       :get
