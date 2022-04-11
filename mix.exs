@@ -29,7 +29,7 @@ defmodule PlugDeviseSession.Mixfile do
 
   defp package do
     [
-      maintainers: ["Karol Słuszniak"],
+      maintainers: ["Fresha"],
       licenses: ["MIT"],
       links: %{
         "GitHub" => "https://github.com/surgeventures/plug_devise_session"
