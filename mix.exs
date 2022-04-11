@@ -51,9 +51,10 @@ defmodule PlugDeviseSession.Mixfile do
     [
       {:confix, "~> 0.1"},
       {:credo, "~> 1.0", only: [:dev, :test]},
+      {:dialyxir, "~> 1.1", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.19", only: :dev, runtime: false},
       {:ex_marshal, "~> 0.0.8"},
-      {:excoveralls, "~> 0.7", only: :test},
+      {:junit_formatter, "~> 3.3", only: [:test]},
       {:plug, "~> 1.3.2 or ~> 1.4"},
       {:plug_rails_cookie_session_store, "~> 2.0"}
     ]
