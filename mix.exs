@@ -12,12 +12,8 @@ defmodule PlugDeviseSession.Mixfile do
       deps: deps(),
       package: package(),
       aliases: aliases(),
-      test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
-        check: :test,
-        coveralls: :test,
-        "coveralls.detail": :test,
-        "coveralls.html": :test
+        check: :test
       ],
       name: "PlugDeviseSession",
       description: "Simple plug for sharing Devise session in Elixir",
