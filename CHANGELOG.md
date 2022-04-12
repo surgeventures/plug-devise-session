@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.0] - 2022-04-11
+### Breaking
+- Use `plug_rails_cookie_session_store` version ~> 2.0 to unlock OTP 24 compatibility.
+
 ## [0.9.0] - 2020-02-07
 ### Changed
 - Update `PlugDeviseSession` plug to also accept `path`, `secure`, and `max_age` cookie options and the special `extra` options used to add arbitrary cookie options.
